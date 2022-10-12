@@ -4,32 +4,13 @@ const { RuleTester } = require('eslint');
 const code = (lines) => lines.join('\n');
 const ruleTester = new RuleTester();
 
-ruleTester.run('sort-requires', rule, {
+ruleTester.run('sort-requires-fix', rule, {
   valid: [
-    code([
-      'var a = require()',
-      'var b = require()',
-    ]),
-    code([
-      'var a = require()',
-      'var b =',
-      '  require()',
-      'var c = require()',
-    ]),
-    code([
-      'var a = require()',
-      'var A = require()',
-    ]),
-    code([
-      'var A = require()',
-      'var a = require()',
-    ]),
-    code([
-      'var a = require()',
-      'var c = require()',
-      '',
-      'var b = require()',
-    ]),
+    code(['var a = require()', 'var b = require()']),
+    code(['var a = require()', 'var b =', '  require()', 'var c = require()']),
+    code(['var a = require()', 'var A = require()']),
+    code(['var A = require()', 'var a = require()']),
+    code(['var a = require()', 'var c = require()', '', 'var b = require()']),
     code([
       'var a = require()[0]',
       'var b = require().test',
@@ -48,108 +29,52 @@ ruleTester.run('sort-requires', rule, {
       parserOptions: { ecmaVersion: 6 },
     },
     {
-      code: code([
-        'const a = require()',
-        'const b = require()',
-      ]),
+      code: code(['const a = require()', 'const b = require()']),
       parserOptions: { ecmaVersion: 6 },
     },
     {
-      code: code([
-        'const b = require()',
-        'let a = require()',
-      ]),
+      code: code(['const b = require()', 'let a = require()']),
       parserOptions: { ecmaVersion: 6 },
     },
-    code([
-      'var b = "hi"',
-      'var a = "sup"',
-    ]),
-    code([
-      'var a = require()',
-      'var c = require()',
-      '',
-      'var b = require()',
-    ]),
+    code(['var b = "hi"', 'var a = "sup"']),
+    code(['var a = require()', 'var c = require()', '', 'var b = require()']),
   ],
 
   invalid: [
     {
-      code: code([
-        'var b = require().default',
-        'var a = require()',
-      ]),
-      output: code([
-        'var a = require()',
-        'var b = require().default',
-      ]),
+      code: code(['var b = require().default', 'var a = require()']),
+      output: code(['var a = require()', 'var b = require().default']),
       errors: [{ message: 'This group of requires is not sorted' }],
     },
     {
-      code: code([
-        'var b =',
-        '  require()',
-        'var a = require()',
-      ]),
-      output: code([
-        'var a = require()',
-        'var b =',
-        '  require()',
-      ]),
+      code: code(['var b =', '  require()', 'var a = require()']),
+      output: code(['var a = require()', 'var b =', '  require()']),
       errors: [{ message: 'This group of requires is not sorted' }],
     },
     {
-      code: code([
-        'var b =',
-        '',
-        '  require()',
-        'var a = require()',
-      ]),
-      output: code([
-        'var a = require()',
-        'var b =',
-        '',
-        '  require()',
-      ]),
+      code: code(['var b =', '', '  require()', 'var a = require()']),
+      output: code(['var a = require()', 'var b =', '', '  require()']),
       errors: [{ message: 'This group of requires is not sorted' }],
     },
     {
-      code: code([
-        'var { b } = require()',
-        'var { a } = require()',
-      ]),
+      code: code(['var { b } = require()', 'var { a } = require()']),
       errors: [{ message: 'This group of requires is not sorted' }],
       parserOptions: { ecmaVersion: 6 },
     },
     {
-      code: code([
-        'var { c, a } = require()',
-        'var { b } = require()',
-      ]),
-      output: code([
-        'var { b } = require()',
-        'var { c, a } = require()',
-      ]),
+      code: code(['var { c, a } = require()', 'var { b } = require()']),
+      output: code(['var { b } = require()', 'var { c, a } = require()']),
       errors: [{ message: 'This group of requires is not sorted' }],
       parserOptions: { ecmaVersion: 6 },
     },
     {
-      code: code([
-        'var { b } = require()',
-        'var a = require()',
-      ]),
+      code: code(['var { b } = require()', 'var a = require()']),
       errors: [{ message: 'This group of requires is not sorted' }],
       parserOptions: { ecmaVersion: 6 },
     },
     {
-      code: code([
-        'let a = require()',
-        'const B = require()',
-      ]),
-      output: code([
-        'const B = require()',
-        'let a = require()',
-      ]),
+      code: code(['let a = require()', 'const B = require()']),
+      output: code(['const B = require()', 'let a = require()']),
       errors: [{ message: 'This group of requires is not sorted' }],
       parserOptions: { ecmaVersion: 6 },
     },
