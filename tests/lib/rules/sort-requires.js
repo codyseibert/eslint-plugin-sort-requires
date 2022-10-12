@@ -1,4 +1,4 @@
-const rule = require('../../../lib').rules['sort-requires'];
+const rule = require('../../../lib').rules['sort-requires-fix'];
 const { RuleTester } = require('eslint');
 
 const code = (lines) => lines.join('\n');

@@ -5,5 +5,5 @@
  */
 
 exports.rules = {
-  'sort-requires': require('./rules/sort-requires')
+  'sort-requires-fix': require('./rules/sort-requires')
 };
